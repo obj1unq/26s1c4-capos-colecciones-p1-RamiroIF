@@ -1,0 +1,48 @@
+import castillos.*
+
+object rolando {
+    const castillo = castilloDePiedra
+    const mochila = #{}
+    const artefactosEncontrados = []
+    var capacidadMaxMochila = 2
+
+    method encontrarArtefacto(artefacto) {
+        artefactosEncontrados.add(artefacto)
+
+        if (not self.hayEspacioEnMochila()) {
+            self.error("No hay espacio en la mochila!")
+        } else self.guardarArtefacto(artefacto)
+    }
+
+    method artefactosEncontrados() = artefactosEncontrados
+
+    method guardarArtefacto(artefacto) { mochila.add(artefacto) }
+
+    method hayEspacioEnMochila() = self.cantArtefactosEnPosesion() < capacidadMaxMochila 
+
+    method cantArtefactosEnPosesion() = mochila.size()
+
+    method artefactosEnPosesion() = mochila.union(self.artefactosEnCastillo())
+
+    method artefactosEnCastillo() = castillo.artefactosAlmacenados()
+    
+    method artefactosEnMochila() = mochila
+
+    method llegarAlCastillo() { 
+        self.almacenarArtefactos()
+        self.vaciarMochila()
+        }
+
+    method almacenarArtefactos() { castillo.almacenarArtefactos(self.artefactosEnPosesion()) }
+
+    method vaciarMochila() { mochila.clear() }
+
+    method poseeElArtefacto(artefacto) { self.artefactosEnPosesion().contains(artefacto) }
+
+    
+}
+
+
+
+
+
