@@ -18,9 +18,9 @@ object rolando {
 
     method guardarArtefacto(artefacto) { mochila.add(artefacto) }
 
-    method hayEspacioEnMochila() = self.cantArtefactosEnPosesion() < capacidadMaxMochila 
+    method hayEspacioEnMochila() = self.cantArtefactosEnMochila() < capacidadMaxMochila 
 
-    method cantArtefactosEnPosesion() = mochila.size()
+    method cantArtefactosEnMochila() = mochila.size()
 
     method artefactosEnPosesion() = mochila.union(self.artefactosEnCastillo())
 

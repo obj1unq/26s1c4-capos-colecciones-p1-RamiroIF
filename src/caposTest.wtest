@@ -1,0 +1,11 @@
+import rolando.*
+import castillos.*
+import artefactos.*
+
+describe "Tests de rolando" {
+
+    test "a"{
+        assert.equals(0, rolando.cantArtefactosEnPosesion())
+    }
+
+}
