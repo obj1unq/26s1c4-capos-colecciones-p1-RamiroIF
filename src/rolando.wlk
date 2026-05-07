@@ -37,7 +37,7 @@ object rolando {
 
     method vaciarMochila() { mochila.clear() }
 
-    method poseeElArtefacto(artefacto) { self.artefactosEnPosesion().contains(artefacto) }
+    method poseeElArtefacto(artefacto) = self.artefactosEnPosesion().contains(artefacto)
 
     
 }
