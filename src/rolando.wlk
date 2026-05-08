@@ -9,12 +9,10 @@ object rolando {
     method encontrarArtefacto(artefacto) {
         artefactosEncontrados.add(artefacto)
 
-        if (not self.hayEspacioEnMochila()) {
-            self.error("No hay espacio en la mochila!")
-        } else self.guardarArtefacto(artefacto)
+        if (self.hayEspacioEnMochila()) self.guardarArtefacto(artefacto)
     }
 
-    method artefactosEncontrados() = artefactosEncontrados
+    method historialArtefactosEncontrados() = artefactosEncontrados
 
     method guardarArtefacto(artefacto) { mochila.add(artefacto) }
 
@@ -22,11 +20,11 @@ object rolando {
 
     method cantArtefactosEnMochila() = mochila.size()
 
-    method artefactosEnPosesion() = mochila.union(self.artefactosEnCastillo())
+    method artefactosEnMochila() = mochila
 
     method artefactosEnCastillo() = castillo.artefactosAlmacenados()
-    
-    method artefactosEnMochila() = mochila
+
+    method artefactosEnPosesion() = mochila.union(self.artefactosEnCastillo())
 
     method llegarAlCastillo() { 
         self.almacenarArtefactos()
