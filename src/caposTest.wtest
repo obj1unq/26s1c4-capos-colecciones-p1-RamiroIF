@@ -3,9 +3,66 @@ import castillos.*
 import artefactos.*
 
 describe "Tests de rolando" {
+    
 
-    test "a"{
-        assert.equals(0, rolando.cantArtefactosEnPosesion())
+    test "Si rolando se encuentra un artefacto y tiene espacio en la mochila, va a guardarselo" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+
+        assert.that(rolando.poseeElArtefacto(espadaDelDestino))
+        assert.equals(1, rolando.cantArtefactosEnMochila())
+        // Tiene algun sentido doble asertar algo asi?
     }
 
+    test "Si rolando se encuentra un artefacto y no tiene espacio en la mochila, no va a guardarselo" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+        rolando.encontrarArtefacto(armaduraDeAceroValyrio)
+        
+        rolando.encontrarArtefacto(collarDivino)
+
+        assert.notThat(rolando.poseeElArtefacto(collarDivino))
+        assert.equals(2, rolando.cantArtefactosEnMochila())
+        // Tiene algun sentido doble asertar algo asi?
+    }
+
+    test "Si rolando se encuentra un artefacto, va a registarlo en el historial de artefactos encontrados" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+        rolando.encontrarArtefacto(armaduraDeAceroValyrio)
+        
+        rolando.encontrarArtefacto(collarDivino)
+
+        assert.equals([espadaDelDestino, armaduraDeAceroValyrio, collarDivino], rolando.historialArtefactosEncontrados())
+    }
+
+    // Tienen sentido estos siguientes 2 tests? Todos los comportortamientos se testan o solo algunos?
+    test "Cuando rolando llega al castillo, vacia la mochila" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+        rolando.encontrarArtefacto(armaduraDeAceroValyrio)
+
+        rolando.llegarAlCastillo()
+
+        assert.equals(0, rolando.cantArtefactosEnMochila())
+    }
+
+    test "Cuando rolando llega al castillo, almacena en el castillo los artefactos que tiene en la mochila" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+        rolando.encontrarArtefacto(armaduraDeAceroValyrio)
+         
+        rolando.llegarAlCastillo()
+
+        assert.equals(#{espadaDelDestino, armaduraDeAceroValyrio}, rolando.artefactosEnCastillo())
+    }
 }
+
+// Por alguna razon estos dos que verifican los artefactos del castillo no funcionan, no entiendo xq no lo almacena
+describe "Test de castillo de piedra" {
+
+    test "Cuando se almacena un artefacto en el castillo, aumenta la cantidad de artefactos almacenados" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+        rolando.encontrarArtefacto(armaduraDeAceroValyrio)
+
+        rolando.llegarAlCastillo()
+
+        assert.equals(#{espadaDelDestino, armaduraDeAceroValyrio}, castilloDePiedra.artefactosAlmacenados())
+    }
+}
+

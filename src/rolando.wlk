@@ -31,7 +31,7 @@ object rolando {
         self.vaciarMochila()
         }
 
-    method almacenarArtefactos() { castillo.almacenarArtefactos(self.artefactosEnPosesion()) }
+    method almacenarArtefactos() { castillo.almacenarArtefactos(self.artefactosEnMochila()) }
 
     method vaciarMochila() { mochila.clear() }
 
