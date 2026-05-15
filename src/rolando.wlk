@@ -47,7 +47,7 @@ object rolando {
 
     method participarEnBatalla() {
         poderBase += 1
-        mochila.sum { artefacto => artefacto.efectosPorBatalla() }
+        mochila.forEach { artefacto => artefacto.contabilizarUsoEnBatalla() }
     }
 }
 

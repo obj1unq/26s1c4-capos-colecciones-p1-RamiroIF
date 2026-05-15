@@ -2,18 +2,21 @@
 object espadaDelDestino {
     var usosEnBatalla = 0
 
-    method efectosPorBatalla() { usosEnBatalla += 1 }
+    method contabilizarUsoEnBatalla() { usosEnBatalla += 1 }
 
     method poderDePelea(dueñoActual) {
         const poderBaseDueño = dueñoActual.poderBase()
-        if (usosEnBatalla >= 1) poderBaseDueño / 2 else poderBaseDueño
+        if (usosEnBatalla >= 1) { 
+            return poderBaseDueño / 2 
+        }
+        return poderBaseDueño
     }
 }
 
 object collarDivino {
     var usosEnBatalla = 0
 
-    method efectosPorBatalla() { usosEnBatalla += 1 }
+    method contabilizarUsoEnBatalla() { usosEnBatalla += 1 }
 
     method poderDePelea(dueñoActual) {
         const poder = 3
@@ -24,7 +27,7 @@ object collarDivino {
 object armaduraDeAceroValyrio {
     var usosEnBatalla = 0
 
-    method efectosPorBatalla() { usosEnBatalla += 1 }
+    method contabilizarUsoEnBatalla() { usosEnBatalla += 1 }
 
     method poderDePelea(dueñoActual) {
         const poder = 6 // agregue la constante para darle un nombre al 6 y no hardcodear el 6 en el return, esta bien que este aca y no como atributo de la armadura?
