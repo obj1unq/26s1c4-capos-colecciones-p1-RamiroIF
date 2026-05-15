@@ -20,7 +20,10 @@ object collarDivino {
 
     method poderDePelea(dueñoActual) {
         const poder = 3
-        if (dueñoActual.poderBase() > 6) poder + usosEnBatalla else poder
+        if (dueñoActual.poderBase() > 6) { 
+            return poder + usosEnBatalla 
+        }
+        return poder
     }    
 }
 
