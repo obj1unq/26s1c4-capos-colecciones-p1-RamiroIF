@@ -11,7 +11,7 @@ object rolando {
 
     method poderDePelea() = poderBase + self.poderDeArtefactosEnMochila()
 
-    method poderDeArtefactosEnMochila() = mochila.sum { artefacto => artefacto.poderDePelea(self) }
+    method poderDeArtefactosEnMochila() = mochila.sum { artefacto => artefacto.poder(self) }
 
     method encontrarArtefacto(artefacto) {
         artefactosEncontrados.add(artefacto)
@@ -47,8 +47,11 @@ object rolando {
 
     method participarEnBatalla() {
         poderBase += 1
-        mochila.forEach { artefacto => artefacto.contabilizarUsoEnBatalla() }
+        mochila.forEach { artefacto => artefacto.aplicarEfectosPorBatalla() }
     }
+
+    method artefactoMasPoderosoEnCastillo() = castillo.artefactoMasPoderoso(self)
+    
 }
 
 
