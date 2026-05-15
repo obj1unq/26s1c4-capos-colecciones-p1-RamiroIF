@@ -17,7 +17,10 @@ describe "Tests de rolando" {
         rolando.encontrarArtefacto(espadaDelDestino)
         rolando.encontrarArtefacto(armaduraDeAceroValyrio)
         
-        rolando.encontrarArtefacto(collarDivino)
+        assert.throwsExceptionWithMessage(
+            "No hay espacio en la mochila",
+            { rolando.encontrarArtefacto(collarDivino) }
+        )
 
         assert.notThat(rolando.poseeElArtefacto(collarDivino))
         assert.equals(2, rolando.cantArtefactosEnMochila())
@@ -28,7 +31,10 @@ describe "Tests de rolando" {
         rolando.encontrarArtefacto(espadaDelDestino)
         rolando.encontrarArtefacto(armaduraDeAceroValyrio)
         
-        rolando.encontrarArtefacto(collarDivino)
+        assert.throwsExceptionWithMessage(
+            "No hay espacio en la mochila",
+            { rolando.encontrarArtefacto(collarDivino) }
+        )
 
         assert.equals([espadaDelDestino, armaduraDeAceroValyrio, collarDivino], rolando.historialArtefactosEncontrados())
     }
