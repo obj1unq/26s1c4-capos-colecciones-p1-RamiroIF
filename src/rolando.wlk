@@ -5,11 +5,19 @@ object rolando {
     const mochila = #{}
     const artefactosEncontrados = []
     var capacidadMaxMochila = 2
+    var poderBase = 5
+
+    method poderBase() = poderBase
+
+    method poderDePelea() = poderBase + self.poderDeArtefactosEnMochila()
+
+    method poderDeArtefactosEnMochila() = mochila.sum { artefacto => artefacto.poderDePelea(self) }
 
     method encontrarArtefacto(artefacto) {
         artefactosEncontrados.add(artefacto)
 
-        if (self.hayEspacioEnMochila()) self.guardarArtefacto(artefacto)
+        if (not self.hayEspacioEnMochila()) self.error("No hay espacio en la mochila")
+        self.guardarArtefacto(artefacto)
     }
 
     method historialArtefactosEncontrados() = artefactosEncontrados
@@ -29,7 +37,7 @@ object rolando {
     method llegarAlCastillo() { 
         self.almacenarArtefactos()
         self.vaciarMochila()
-        }
+    }
 
     method almacenarArtefactos() { castillo.almacenarArtefactos(self.artefactosEnMochila()) }
 
@@ -37,7 +45,10 @@ object rolando {
 
     method poseeElArtefacto(artefacto) = self.artefactosEnPosesion().contains(artefacto)
 
-    
+    method participarEnBatalla() {
+        poderBase += 1
+        mochila.sum { artefacto => artefacto.efectosPorBatalla(self) }
+    }
 }
 
 
