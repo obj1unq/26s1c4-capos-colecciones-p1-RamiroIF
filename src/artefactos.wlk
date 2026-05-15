@@ -1,25 +1,30 @@
 
 object espadaDelDestino {
+    var poder = 0
     var usosEnBatalla = 0
+
+    method aplicarEfectosPorBatalla() { self.contabilizarUsoEnBatalla() }
 
     method contabilizarUsoEnBatalla() { usosEnBatalla += 1 }
 
-    method poderDePelea(dueñoActual) {
-        const poderBaseDueño = dueñoActual.poderBase()
+    method poder(dueñoActual) {
+        poder = dueñoActual.poderBase()
         if (usosEnBatalla >= 1) { 
-            return poderBaseDueño / 2 
+            return poder / 2 
         }
-        return poderBaseDueño
+        return poder
     }
 }
 
 object collarDivino {
+    const poder = 3
     var usosEnBatalla = 0
+
+    method aplicarEfectosPorBatalla() { self.contabilizarUsoEnBatalla() }
 
     method contabilizarUsoEnBatalla() { usosEnBatalla += 1 }
 
-    method poderDePelea(dueñoActual) {
-        const poder = 3
+    method poder(dueñoActual) {
         if (dueñoActual.poderBase() > 6) { 
             return poder + usosEnBatalla 
         }
@@ -28,16 +33,47 @@ object collarDivino {
 }
 
 object armaduraDeAceroValyrio {
-    var usosEnBatalla = 0
+    const poder = 6
+    //var usosEnBatalla = 0
 
-    method contabilizarUsoEnBatalla() { usosEnBatalla += 1 }
+    method poder(dueñoActual) = poder
 
-    method poderDePelea(dueñoActual) {
-        const poder = 6 // agregue la constante para darle un nombre al 6 y no hardcodear el 6 en el return, esta bien que este aca y no como atributo de la armadura?
-        return poder
-    }
+    method aplicarEfectosPorBatalla() {}
 }
 
 object libroDeHechizos {
-    
+    var hechizos = []
+
+    method poder(dueñoActual) {
+        if (hechizos.isEmpty()) {
+            return 0
+        }
+        return hechizos.first().poder(dueñoActual)
+    }
+
+    method aplicarEfectosPorBatalla() {
+        hechizos.remove(hechizos.first())
+    }
+}
+
+
+// Hechizos
+object bendicion {
+    const poder = 4
+
+    method poder(dueñoActual) = poder
+}
+
+object invisibilidad {
+
+    method poder(dueñoActual) {
+        return dueñoActual.poderBase()
+    }  
+}
+
+object invocacion {
+
+    method poder(dueñoActual) {
+        return dueñoActual.artefactoMasPoderosoEnCastillo().poder(dueñoActual)
+    }    
 }
