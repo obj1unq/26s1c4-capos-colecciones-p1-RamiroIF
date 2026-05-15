@@ -57,7 +57,30 @@ describe "Tests de rolando" {
 
         assert.equals(#{espadaDelDestino, armaduraDeAceroValyrio}, rolando.artefactosEnCastillo())
     }
+
+    test "Al comienzo, rolando tiene un poder base de 5" {
+        assert.equals(5, rolando.poderBase())
+    }
+
+    test "Cuando rolando no tiene artefactos en posesion, su poder de pelea es unicamente su poder base" {
+        assert.equals(rolando.poderDePelea(), rolando.poderBase())
+        assert.that(rolando.artefactosEnMochila().isEmpty())
+    }
+
+    test "Cuando rolando tiene algun artefacto, su poder de pelea es mayor a su poder base" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+
+        assert.that(rolando.poderDePelea() > rolando.poderBase())
+    }
+
+    test "Cuando rolando participa en una batalla, aumenta su poder base en 1" {
+        rolando.participarEnBatalla()
+
+        assert.equals(6, rolando.poderBase())
+    }
 }
+
+
 
 // Por alguna razon estos dos que verifican los artefactos del castillo no funcionan, no entiendo xq no lo almacena
 describe "Test de castillo de piedra" {
@@ -72,3 +95,47 @@ describe "Test de castillo de piedra" {
     }
 }
 
+
+
+describe "Test de artefactos" {
+
+    test "Cuando la espada del destino es utilizada por primera vez, aporta la misma cantidad de poder de pelea que el poder base del personaje propietario" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+
+        assert.equals(rolando.poderBase(), espadaDelDestino.poderDePelea(rolando))
+    }
+
+    test "Cuando la espada del destino ya fue utilizada, aporta como poder de pelea el 50% del poder base del personaje propietario." {
+        rolando.encontrarArtefacto(espadaDelDestino)
+
+        rolando.participarEnBatalla()
+
+        assert.equals((rolando.poderBase() / 2), espadaDelDestino.poderDePelea(rolando))
+    }
+
+    test "El collar divino aporta 3 puntos de poder de pelea" {
+        rolando.encontrarArtefacto(collarDivino)
+
+        assert.equals(3, collarDivino.poderDePelea(rolando))
+    }
+
+    test "Si el dueño del collar divino tiene un poder base mayor a 6, el collar divino le sumara un punto por cada batalla en la que fue utilizado al poder de pelea que aporta" {
+        rolando.encontrarArtefacto(collarDivino)
+
+        rolando.participarEnBatalla()
+        rolando.participarEnBatalla()
+        rolando.participarEnBatalla()
+
+        assert.equals(6, collarDivino.poderDePelea(rolando))
+    }
+
+    test "La armadura de acero valyrio siempre aporta 6 de poder de pelea y no sufre efectos por las batallas" {
+        rolando.encontrarArtefacto(armaduraDeAceroValyrio)
+
+        rolando.participarEnBatalla()
+        rolando.participarEnBatalla()
+        rolando.participarEnBatalla()
+
+        assert.equals(6, armaduraDeAceroValyrio.poderDePelea(rolando))
+    }
+}
