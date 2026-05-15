@@ -96,13 +96,14 @@ describe "Test de castillo de piedra" {
 }
 
 
+// TEST DE ARTEFACTOS
 
-describe "Test de artefactos" {
+describe "Test de espada del destino" {
 
     test "Cuando la espada del destino es utilizada por primera vez, aporta la misma cantidad de poder de pelea que el poder base del personaje propietario" {
         rolando.encontrarArtefacto(espadaDelDestino)
 
-        assert.equals(rolando.poderBase(), espadaDelDestino.poderDePelea(rolando))
+        assert.equals(rolando.poderBase(), espadaDelDestino.poder(rolando))
     }
 
     test "Cuando la espada del destino ya fue utilizada, aporta como poder de pelea el 50% del poder base del personaje propietario." {
@@ -110,13 +111,16 @@ describe "Test de artefactos" {
 
         rolando.participarEnBatalla()
 
-        assert.equals((rolando.poderBase() / 2), espadaDelDestino.poderDePelea(rolando))
+        assert.equals((rolando.poderBase() / 2), espadaDelDestino.poder(rolando))
     }
+}
+
+describe "Test de collar divino" {
 
     test "El collar divino aporta 3 puntos de poder de pelea" {
         rolando.encontrarArtefacto(collarDivino)
 
-        assert.equals(3, collarDivino.poderDePelea(rolando))
+        assert.equals(3, collarDivino.poder(rolando))
     }
 
     test "Si el dueño del collar divino tiene un poder base mayor a 6, el collar divino le sumara un punto por cada batalla en la que fue utilizado al poder de pelea que aporta" {
@@ -126,8 +130,10 @@ describe "Test de artefactos" {
         rolando.participarEnBatalla()
         rolando.participarEnBatalla()
 
-        assert.equals(6, collarDivino.poderDePelea(rolando))
+        assert.equals(6, collarDivino.poder(rolando))
     }
+}
+describe "Test de armadura de acero valyrio" {
 
     test "La armadura de acero valyrio siempre aporta 6 de poder de pelea y no sufre efectos por las batallas" {
         rolando.encontrarArtefacto(armaduraDeAceroValyrio)
@@ -136,6 +142,38 @@ describe "Test de artefactos" {
         rolando.participarEnBatalla()
         rolando.participarEnBatalla()
 
-        assert.equals(6, armaduraDeAceroValyrio.poderDePelea(rolando))
+        assert.equals(6, armaduraDeAceroValyrio.poder(rolando))
     }
 }
+
+describe "Test de libro de hechizos" {
+
+    test "Si el libro de hechizos no tiene ningun hechizo para usar, no aporta poder de pelea" {
+        rolando.encontrarArtefacto(libroDeHechizos)
+
+        assert.equals(0, libroDeHechizos.poder(rolando))
+        assert.equals(rolando.poderBase(), rolando.poderDePelea())
+    }
+
+    test "Si el libro de hechizos tiene algun hechizo para usar, va a aumentar el poder de pelea del portador" {
+        libroDeHechizos.agregarHechizo(bendicion)
+
+        rolando.encontrarArtefacto(libroDeHechizos)
+
+        assert.that(rolando.poderBase() < rolando.poderDePelea())
+        // Deberia formular los assert priorizando usar mensajes del objeto que estoy haciendo el test?
+        // por ej, assert.that(0 < libroDeHechizos.poder(rolando))
+    }
+
+    test "Cuando se usa un hechizo del libro se hace respetando el orden en que estan guardados, descartando el mismo luego de utilizarlo." {
+        libroDeHechizos.agregarHechizo(invocacion)
+        libroDeHechizos.agregarHechizo(bendicion)
+        rolando.encontrarArtefacto(libroDeHechizos)
+
+        rolando.participarEnBatalla()
+
+        assert.equals(4, libroDeHechizos.poder(rolando))
+    }
+}
+
+// Hace falta los test de los hechizos? Simplemente dan el poder que aporta

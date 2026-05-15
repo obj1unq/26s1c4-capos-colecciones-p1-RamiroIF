@@ -42,7 +42,9 @@ object armaduraDeAceroValyrio {
 }
 
 object libroDeHechizos {
-    var hechizos = []
+    const hechizos = []
+
+    method agregarHechizo(hechizo) { hechizos.add(hechizo) }
 
     method poder(dueñoActual) {
         if (hechizos.isEmpty()) {
@@ -51,9 +53,7 @@ object libroDeHechizos {
         return hechizos.first().poder(dueñoActual)
     }
 
-    method aplicarEfectosPorBatalla() {
-        hechizos.remove(hechizos.first())
-    }
+    method aplicarEfectosPorBatalla() { hechizos.remove(hechizos.first()) }
 }
 
 
@@ -66,14 +66,10 @@ object bendicion {
 
 object invisibilidad {
 
-    method poder(dueñoActual) {
-        return dueñoActual.poderBase()
-    }  
+    method poder(dueñoActual) = dueñoActual.poderBase()
 }
 
 object invocacion {
-
-    method poder(dueñoActual) {
-        return dueñoActual.artefactoMasPoderosoEnCastillo().poder(dueñoActual)
-    }    
+    
+    method poder(dueñoActual) = dueñoActual.artefactoMasPoderosoEnCastillo().poder(dueñoActual)
 }
