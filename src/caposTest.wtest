@@ -1,5 +1,5 @@
 import rolando.*
-import castillos.*
+import moradas.*
 import artefactos.*
 
 describe "Tests de rolando" {
@@ -177,3 +177,11 @@ describe "Test de libro de hechizos" {
 }
 
 // Hace falta los test de los hechizos? Simplemente dan el poder que aporta
+
+
+
+
+
+
+
+

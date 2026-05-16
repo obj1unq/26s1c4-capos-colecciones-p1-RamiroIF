@@ -1,9 +1,11 @@
-import castillos.*
+import moradas.*
+import enemigos.*
 
 object rolando {
-    const castillo = castilloDePiedra
+    const morada = castilloDePiedra
     const mochila = #{}
     const artefactosEncontrados = []
+    const enemigos = #{caterina, archibaldo, astra}
     var capacidadMaxMochila = 2
     var poderBase = 5
 
@@ -30,7 +32,7 @@ object rolando {
 
     method artefactosEnMochila() = mochila
 
-    method artefactosEnCastillo() = castillo.artefactosAlmacenados()
+    method artefactosEnCastillo() = morada.artefactosAlmacenados()
 
     method artefactosEnPosesion() = mochila.union(self.artefactosEnCastillo())
 
@@ -39,7 +41,7 @@ object rolando {
         self.vaciarMochila()
     }
 
-    method almacenarArtefactos() { castillo.almacenarArtefactos(self.artefactosEnMochila()) }
+    method almacenarArtefactos() { morada.almacenarArtefactos(self.artefactosEnMochila()) }
 
     method vaciarMochila() { mochila.clear() }
 
@@ -50,7 +52,12 @@ object rolando {
         mochila.forEach { artefacto => artefacto.aplicarEfectosPorBatalla() }
     }
 
-    method artefactoMasPoderosoEnCastillo() = castillo.artefactoMasPoderoso(self)
+    method artefactoMasPoderosoEnCastillo() = morada.artefactoMasPoderoso(self)
+
+    method enemigosVencibles() = enemigos.filter({ enemigo => enemigo.poder() < self.poderDePelea() })
+
+    method moradasConquistables() = self.enemigosVencibles().map({ enemigo => enemigo.morada() })
+    
     
 }
 

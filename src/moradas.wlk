@@ -10,3 +10,15 @@ object castilloDePiedra {
 
     method artefactoMasPoderoso(dueño) = artefactosAlmacenados.max({ a => a.poder(dueño) })
 }
+
+object fortalezaDeAcero {
+
+}
+
+object palacioDeMarmol {
+
+}
+
+object torreDeMarfil {
+    
+}
