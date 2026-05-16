@@ -4,7 +4,6 @@ import artefactos.*
 import enemigos.*
 
 describe "Tests de rolando" {
-    
 
     test "Si rolando se encuentra un artefacto y tiene espacio en la mochila, va a guardarselo" {
         rolando.encontrarArtefacto(espadaDelDestino)
@@ -81,9 +80,7 @@ describe "Tests de rolando" {
     }
 }
 
-
-
-// Por alguna razon estos dos que verifican los artefactos del castillo no funcionan, no entiendo xq no lo almacena
+// TEST DE MORADAS
 describe "Test de castillo de piedra" {
 
     test "Cuando se almacena un artefacto en el castillo, aumenta la cantidad de artefactos almacenados" {
@@ -180,6 +177,7 @@ describe "Test de libro de hechizos" {
 // Hace falta los test de los hechizos? Simplemente dan el poder que aporta
 
 
+// ENEMIGOS
 describe "Test de enemigos" {
 
     test "Caterina tiene 28 de poder de pelea y vive en la fortaleza de acero" {
@@ -201,7 +199,7 @@ describe "Test de enemigos" {
 describe "Test de rolando con enemigos" {
     
     test "Si rolando no tiene el poder de pelea suficiente, no podra vencer a ningun enemigo en Erethia" {
-        assert.equals({}, rolando.enemigosVencibles())
+        assert.equals(#{}, rolando.enemigosVencibles())
     }
 
     test "Si rolando obtiene el poder de pelea suficiente, podra vencer a algunos enemigos en Erethia" {

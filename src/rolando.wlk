@@ -9,7 +9,8 @@ object rolando {
     var capacidadMaxMochila = 2
     var poderBase = 5
 
-    method aumentarCapacidadMochila() { capacidadMaxMochila += 1 }
+    method poderBase(_poderBase) { poderBase = _poderBase } // Unicamente para poder hacer los test de 2.5 Artefacto Fatal y subirte el poder base a conveniencia.
+    // Se que podria ser una property y solucionado, pero quiero dejarlo separado para mantener la aclaracion de arriba.
 
     method poderBase() = poderBase
 
@@ -29,6 +30,8 @@ object rolando {
     method guardarArtefacto(artefacto) { mochila.add(artefacto) }
 
     method hayEspacioEnMochila() = self.cantArtefactosEnMochila() < capacidadMaxMochila 
+
+    method aumentarCapacidadMochila() { capacidadMaxMochila += 1 } // Unicamente para utilizar en tests.
 
     method cantArtefactosEnMochila() = mochila.size()
 
@@ -61,6 +64,22 @@ object rolando {
     method moradasConquistables() = self.enemigosVencibles().map({ enemigo => enemigo.morada() }).asSet()
     
     method esPoderoso() = self.enemigosVencibles() == enemigos
+
+    method artefactoFatal(enemigo) {
+        if (not self.poseeArtefactoFatal(enemigo)) {
+            self.error("No posee un artefacto fatal para enfrentar a " + enemigo)
+        }
+        return self.artefactoMasPoderoso()
+    }
+
+    method poseeArtefactoFatal(enemigo) = (poderBase + self.artefactoMasPoderoso().poder()) > enemigo.poder()
+
+    method artefactoMasPoderoso() {
+        if (mochila.isEmpty()) {
+            self.error("Rolando no posee ningun artefacto")
+        }
+        return mochila.max({ artefacto => artefacto.poder(self) })
+    }
 }
 
 

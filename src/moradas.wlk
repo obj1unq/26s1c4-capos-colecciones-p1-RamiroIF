@@ -8,7 +8,13 @@ object castilloDePiedra {
  
         // Si no, tengo q hacer un recorrido forEach del argumento que llega y agregar artefacto por artefacto para modificar el ya existente sin reemplazarlo (metodo orden)
 
-    method artefactoMasPoderoso(dueño) = artefactosAlmacenados.max({ a => a.poder(dueño) })
+    method artefactoMasPoderoso(dueño) {
+        if (artefactosAlmacenados.isEmpty()) {
+            self.error("No hay ningun artefacto almacenado en el castillo")
+        }
+        return artefactosAlmacenados.max({ a => a.poder(dueño) })
+    }
+
 }
 
 object fortalezaDeAcero {
@@ -20,5 +26,5 @@ object palacioDeMarmol {
 }
 
 object torreDeMarfil {
-    
+
 }
