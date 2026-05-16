@@ -1,6 +1,7 @@
 import rolando.*
 import moradas.*
 import artefactos.*
+import enemigos.*
 
 describe "Tests de rolando" {
     
@@ -179,8 +180,78 @@ describe "Test de libro de hechizos" {
 // Hace falta los test de los hechizos? Simplemente dan el poder que aporta
 
 
+describe "Test de enemigos" {
 
+    test "Caterina tiene 28 de poder de pelea y vive en la fortaleza de acero" {
+        assert.equals(28, caterina.poder())
+        assert.equals(fortalezaDeAcero, caterina.morada())
+    }
 
+    test "Archibaldo tiene 16 de poder de pelea y vive en el palacio de mármol" {
+        assert.equals(16, archibaldo.poder())
+        assert.equals(palacioDeMarmol, archibaldo.morada())
+    }
+
+    test "Astra tiene 14 de poder pelea y vive en la torre de marfil" {
+        assert.equals(14, astra.poder())
+        assert.equals(torreDeMarfil, astra.morada())
+    }
+}
+
+describe "Test de rolando con enemigos" {
+    
+    test "Si rolando no tiene el poder de pelea suficiente, no podra vencer a ningun enemigo en Erethia" {
+        assert.equals({}, rolando.enemigosVencibles())
+    }
+
+    test "Si rolando obtiene el poder de pelea suficiente, podra vencer a algunos enemigos en Erethia" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+        rolando.llegarAlCastillo()
+        rolando.aumentarCapacidadMochila()
+        rolando.encontrarArtefacto(armaduraDeAceroValyrio)
+        rolando.encontrarArtefacto(collarDivino)
+        rolando.participarEnBatalla()
+        rolando.participarEnBatalla()
+        rolando.participarEnBatalla()
+        libroDeHechizos.agregarHechizo(invocacion)
+        rolando.encontrarArtefacto(libroDeHechizos)
+
+        assert.equals(#{astra, archibaldo}, rolando.enemigosVencibles())
+    }
+
+    test "Rolando podra conquistar las moradas de los enemigos que pueda vencer" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+        rolando.llegarAlCastillo()
+        rolando.aumentarCapacidadMochila()
+        rolando.encontrarArtefacto(armaduraDeAceroValyrio)
+        rolando.encontrarArtefacto(collarDivino)
+        rolando.participarEnBatalla()
+        rolando.participarEnBatalla()
+        rolando.participarEnBatalla()
+        libroDeHechizos.agregarHechizo(invocacion)
+        rolando.encontrarArtefacto(libroDeHechizos)
+
+        assert.equals(#{astra, archibaldo}, rolando.enemigosVencibles())
+        assert.equals(#{torreDeMarfil, palacioDeMarmol}, rolando.moradasConquistables())
+    }
+
+    test "Si rolando tiene el poder de pelea suficiente para vencer a todos los enemigos, sera considerado poderoso en la teirra de Erethia" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+        rolando.llegarAlCastillo()
+        rolando.aumentarCapacidadMochila()
+        rolando.encontrarArtefacto(armaduraDeAceroValyrio)
+        rolando.encontrarArtefacto(collarDivino)
+        rolando.participarEnBatalla()
+        rolando.participarEnBatalla()
+        rolando.participarEnBatalla()
+        rolando.participarEnBatalla()
+        libroDeHechizos.agregarHechizo(invocacion)
+        rolando.encontrarArtefacto(libroDeHechizos)
+
+        assert.equals(#{astra, archibaldo, caterina}, rolando.enemigosVencibles())
+        assert.that(rolando.esPoderoso())
+    }
+}
 
 
 

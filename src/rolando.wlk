@@ -58,7 +58,7 @@ object rolando {
 
     method enemigosVencibles() = enemigos.filter({ enemigo => enemigo.poder() < self.poderDePelea() })
 
-    method moradasConquistables() = self.enemigosVencibles().map({ enemigo => enemigo.morada() })
+    method moradasConquistables() = self.enemigosVencibles().map({ enemigo => enemigo.morada() }).asSet()
     
     method esPoderoso() = self.enemigosVencibles() == enemigos
 }
