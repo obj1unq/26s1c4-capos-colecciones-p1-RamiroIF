@@ -1,0 +1,284 @@
+import rolando.*
+import moradas.*
+import artefactos.*
+import enemigos.*
+
+describe "Tests de rolando" {
+
+    test "Si rolando se encuentra un artefacto y tiene espacio en la mochila, va a guardarselo" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+
+        assert.that(rolando.poseeElArtefacto(espadaDelDestino))
+        assert.equals(1, rolando.cantArtefactosEnMochila())
+        // Tiene algun sentido doble asertar algo asi?
+    }
+
+    test "Si rolando se encuentra un artefacto y no tiene espacio en la mochila, no va a guardarselo" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+        rolando.encontrarArtefacto(armaduraDeAceroValyrio)
+        
+        assert.throwsExceptionWithMessage(
+            "No hay espacio en la mochila",
+            { rolando.encontrarArtefacto(collarDivino) }
+        )
+
+        assert.notThat(rolando.poseeElArtefacto(collarDivino))
+        assert.equals(2, rolando.cantArtefactosEnMochila())
+        // Tiene algun sentido doble asertar algo asi?
+    }
+
+    test "Si rolando se encuentra un artefacto, va a registarlo en el historial de artefactos encontrados" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+        rolando.encontrarArtefacto(armaduraDeAceroValyrio)
+        
+        assert.throwsExceptionWithMessage(
+            "No hay espacio en la mochila",
+            { rolando.encontrarArtefacto(collarDivino) }
+        )
+
+        assert.equals([espadaDelDestino, armaduraDeAceroValyrio, collarDivino], rolando.historialArtefactosEncontrados())
+    }
+
+    // Tienen sentido estos siguientes 2 tests? Todos los comportortamientos se testan o solo algunos?
+    test "Cuando rolando llega al castillo, vacia la mochila" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+        rolando.encontrarArtefacto(armaduraDeAceroValyrio)
+
+        rolando.llegarAlCastillo()
+
+        assert.equals(0, rolando.cantArtefactosEnMochila())
+    }
+
+    test "Cuando rolando llega al castillo, almacena en el castillo los artefactos que tiene en la mochila" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+        rolando.encontrarArtefacto(armaduraDeAceroValyrio)
+         
+        rolando.llegarAlCastillo()
+
+        assert.equals(#{espadaDelDestino, armaduraDeAceroValyrio}, rolando.artefactosEnCastillo())
+    }
+
+    test "Al comienzo, rolando tiene un poder base de 5" {
+        assert.equals(5, rolando.poderBase())
+    }
+
+    test "Cuando rolando no tiene artefactos en posesion, su poder de pelea es unicamente su poder base" {
+        assert.equals(rolando.poderDePelea(), rolando.poderBase())
+        assert.that(rolando.artefactosEnMochila().isEmpty())
+    }
+
+    test "Cuando rolando tiene algun artefacto, su poder de pelea es mayor a su poder base" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+
+        assert.that(rolando.poderDePelea() > rolando.poderBase())
+    }
+
+    test "Cuando rolando participa en una batalla, aumenta su poder base en 1" {
+        rolando.participarEnBatalla()
+
+        assert.equals(6, rolando.poderBase())
+    }
+}
+
+// TEST DE MORADAS
+describe "Test de castillo de piedra" {
+
+    test "Cuando se almacena un artefacto en el castillo, aumenta la cantidad de artefactos almacenados" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+        rolando.encontrarArtefacto(armaduraDeAceroValyrio)
+
+        rolando.llegarAlCastillo()
+
+        assert.equals(#{espadaDelDestino, armaduraDeAceroValyrio}, castilloDePiedra.artefactosAlmacenados())
+    }
+}
+
+
+// TEST DE ARTEFACTOS
+
+describe "Test de espada del destino" {
+
+    test "Cuando la espada del destino es utilizada por primera vez, aporta la misma cantidad de poder de pelea que el poder base del personaje propietario" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+
+        assert.equals(rolando.poderBase(), espadaDelDestino.poder(rolando))
+    }
+
+    test "Cuando la espada del destino ya fue utilizada, aporta como poder de pelea el 50% del poder base del personaje propietario." {
+        rolando.encontrarArtefacto(espadaDelDestino)
+
+        rolando.participarEnBatalla()
+
+        assert.equals((rolando.poderBase() / 2), espadaDelDestino.poder(rolando))
+    }
+}
+
+describe "Test de collar divino" {
+
+    test "El collar divino aporta 3 puntos de poder de pelea" {
+        rolando.encontrarArtefacto(collarDivino)
+
+        assert.equals(3, collarDivino.poder(rolando))
+    }
+
+    test "Si el dueño del collar divino tiene un poder base mayor a 6, el collar divino le sumara un punto por cada batalla en la que fue utilizado al poder de pelea que aporta" {
+        rolando.encontrarArtefacto(collarDivino)
+
+        rolando.participarEnBatalla()
+        rolando.participarEnBatalla()
+        rolando.participarEnBatalla()
+
+        assert.equals(6, collarDivino.poder(rolando))
+    }
+}
+describe "Test de armadura de acero valyrio" {
+
+    test "La armadura de acero valyrio siempre aporta 6 de poder de pelea y no sufre efectos por las batallas" {
+        rolando.encontrarArtefacto(armaduraDeAceroValyrio)
+
+        rolando.participarEnBatalla()
+        rolando.participarEnBatalla()
+        rolando.participarEnBatalla()
+
+        assert.equals(6, armaduraDeAceroValyrio.poder(rolando))
+    }
+}
+
+describe "Test de libro de hechizos" {
+
+    test "Si el libro de hechizos no tiene ningun hechizo para usar, no aporta poder de pelea" {
+        rolando.encontrarArtefacto(libroDeHechizos)
+
+        assert.equals(0, libroDeHechizos.poder(rolando))
+        assert.equals(rolando.poderBase(), rolando.poderDePelea())
+    }
+
+    test "Si el libro de hechizos tiene algun hechizo para usar, va a aumentar el poder de pelea del portador" {
+        libroDeHechizos.agregarHechizo(bendicion)
+
+        rolando.encontrarArtefacto(libroDeHechizos)
+
+        assert.that(rolando.poderBase() < rolando.poderDePelea())
+        // Deberia formular los assert priorizando usar mensajes del objeto que estoy haciendo el test?
+        // por ej, assert.that(0 < libroDeHechizos.poder(rolando))
+    }
+
+    test "Cuando se usa un hechizo del libro se hace respetando el orden en que estan guardados, descartando el mismo luego de utilizarlo." {
+        libroDeHechizos.agregarHechizo(invocacion)
+        libroDeHechizos.agregarHechizo(bendicion)
+        rolando.encontrarArtefacto(libroDeHechizos)
+
+        rolando.participarEnBatalla()
+
+        assert.equals(bendicion.poder(rolando), libroDeHechizos.poder(rolando))
+    }
+}
+
+// Hace falta los test de los hechizos? Simplemente dan el poder que aporta
+
+
+// ENEMIGOS
+describe "Test de enemigos" {
+
+    test "Caterina tiene 28 de poder de pelea y vive en la fortaleza de acero" {
+        assert.equals(28, caterina.poder())
+        assert.equals(fortalezaDeAcero, caterina.morada())
+    }
+
+    test "Archibaldo tiene 16 de poder de pelea y vive en el palacio de mármol" {
+        assert.equals(16, archibaldo.poder())
+        assert.equals(palacioDeMarmol, archibaldo.morada())
+    }
+
+    test "Astra tiene 14 de poder pelea y vive en la torre de marfil" {
+        assert.equals(14, astra.poder())
+        assert.equals(torreDeMarfil, astra.morada())
+    }
+}
+
+describe "Test de rolando con enemigos" {
+    
+    test "Si rolando no tiene el poder de pelea suficiente, no podra vencer a ningun enemigo en Erethia" {
+        assert.equals(#{}, rolando.enemigosVencibles())
+    }
+
+    test "Si rolando obtiene el poder de pelea suficiente, podra vencer a algunos enemigos en Erethia" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+        rolando.llegarAlCastillo()
+        rolando.aumentarCapacidadMochila()
+        rolando.encontrarArtefacto(armaduraDeAceroValyrio)
+        rolando.encontrarArtefacto(collarDivino)
+        rolando.participarEnBatalla()
+        rolando.participarEnBatalla()
+        rolando.participarEnBatalla()
+        libroDeHechizos.agregarHechizo(invocacion)
+        rolando.encontrarArtefacto(libroDeHechizos)
+
+        assert.equals(#{astra, archibaldo}, rolando.enemigosVencibles())
+    }
+
+    test "Rolando podra conquistar las moradas de los enemigos que pueda vencer" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+        rolando.llegarAlCastillo()
+        rolando.aumentarCapacidadMochila()
+        rolando.encontrarArtefacto(armaduraDeAceroValyrio)
+        rolando.encontrarArtefacto(collarDivino)
+        rolando.participarEnBatalla()
+        rolando.participarEnBatalla()
+        rolando.participarEnBatalla()
+        libroDeHechizos.agregarHechizo(invocacion)
+        rolando.encontrarArtefacto(libroDeHechizos)
+
+        assert.equals(#{astra, archibaldo}, rolando.enemigosVencibles())
+        assert.equals(#{torreDeMarfil, palacioDeMarmol}, rolando.moradasConquistables())
+    }
+
+    test "Si rolando tiene el poder de pelea suficiente para vencer a todos los enemigos, sera considerado poderoso en la teirra de Erethia" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+        rolando.llegarAlCastillo()
+        rolando.aumentarCapacidadMochila()
+        rolando.encontrarArtefacto(armaduraDeAceroValyrio)
+        rolando.encontrarArtefacto(collarDivino)
+        rolando.participarEnBatalla()
+        rolando.participarEnBatalla()
+        rolando.participarEnBatalla()
+        rolando.participarEnBatalla()
+        libroDeHechizos.agregarHechizo(invocacion)
+        rolando.encontrarArtefacto(libroDeHechizos)
+
+        assert.equals(#{astra, archibaldo, caterina}, rolando.enemigosVencibles())
+        assert.that(rolando.esPoderoso())
+    }
+}
+
+describe "Tests artefacto fatal" {
+
+    test "Si rolando no tiene ningun artefacto en la mochila, no tendra ningun artefacto fatal" {
+        assert.throwsExceptionWithMessage(
+            "Rolando no posee ningun artefacto",
+            { rolando.artefactoFatal(astra) }
+        )
+    }
+
+    test "Si rolando posee artefactos en la mochila pero ninguno le aporta el poder de pelea suficiente para vencer al enemigo indicado, no tendra ningun artefacto fatal" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+
+        assert.throwsExceptionWithMessage(
+           "No posee un artefacto fatal para enfrentar a " + astra,
+            { rolando.artefactoFatal(astra) }
+        )
+    }
+
+    test "Si rolando tiene un artefacto en la mochila que le aporte un poder de pelea superior al poder de batalla de un enemigo, tiene un artefacto fatal para enfrentarlo" {
+        rolando.poderBase(10)
+        rolando.encontrarArtefacto(espadaDelDestino)
+        rolando.encontrarArtefacto(collarDivino)
+
+        assert.that(rolando.poseeArtefactoFatal(astra))
+        assert.equals(espadaDelDestino, rolando.artefactoFatal(astra))
+    }
+}
+
+
+
+
