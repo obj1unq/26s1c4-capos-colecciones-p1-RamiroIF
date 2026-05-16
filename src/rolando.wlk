@@ -9,6 +9,8 @@ object rolando {
     var capacidadMaxMochila = 2
     var poderBase = 5
 
+    method aumentarCapacidadMochila() { capacidadMaxMochila += 1 }
+
     method poderBase() = poderBase
 
     method poderDePelea() = poderBase + self.poderDeArtefactosEnMochila()
@@ -58,7 +60,7 @@ object rolando {
 
     method moradasConquistables() = self.enemigosVencibles().map({ enemigo => enemigo.morada() })
     
-    
+    method esPoderoso() = self.enemigosVencibles() == enemigos
 }
 
 
