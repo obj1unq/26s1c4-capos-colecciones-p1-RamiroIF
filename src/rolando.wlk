@@ -72,7 +72,7 @@ object rolando {
         return self.artefactoMasPoderoso()
     }
 
-    method poseeArtefactoFatal(enemigo) = (poderBase + self.artefactoMasPoderoso().poder()) > enemigo.poder()
+    method poseeArtefactoFatal(enemigo) = (poderBase + self.artefactoMasPoderoso().poder(self)) > enemigo.poder()
 
     method artefactoMasPoderoso() {
         if (mochila.isEmpty()) {

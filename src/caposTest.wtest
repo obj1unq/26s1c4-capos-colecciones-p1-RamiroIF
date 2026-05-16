@@ -170,7 +170,7 @@ describe "Test de libro de hechizos" {
 
         rolando.participarEnBatalla()
 
-        assert.equals(4, libroDeHechizos.poder(rolando))
+        assert.equals(bendicion.poder(rolando), libroDeHechizos.poder(rolando))
     }
 }
 
@@ -248,6 +248,34 @@ describe "Test de rolando con enemigos" {
 
         assert.equals(#{astra, archibaldo, caterina}, rolando.enemigosVencibles())
         assert.that(rolando.esPoderoso())
+    }
+}
+
+describe "Tests artefacto fatal" {
+
+    test "Si rolando no tiene ningun artefacto en la mochila, no tendra ningun artefacto fatal" {
+        assert.throwsExceptionWithMessage(
+            "Rolando no posee ningun artefacto",
+            { rolando.artefactoFatal(astra) }
+        )
+    }
+
+    test "Si rolando posee artefactos en la mochila pero ninguno le aporta el poder de pelea suficiente para vencer al enemigo indicado, no tendra ningun artefacto fatal" {
+        rolando.encontrarArtefacto(espadaDelDestino)
+
+        assert.throwsExceptionWithMessage(
+           "No posee un artefacto fatal para enfrentar a " + astra,
+            { rolando.artefactoFatal(astra) }
+        )
+    }
+
+    test "Si rolando tiene un artefacto en la mochila que le aporte un poder de pelea superior al poder de batalla de un enemigo, tiene un artefacto fatal para enfrentarlo" {
+        rolando.poderBase(10)
+        rolando.encontrarArtefacto(espadaDelDestino)
+        rolando.encontrarArtefacto(collarDivino)
+
+        assert.that(rolando.poseeArtefactoFatal(astra))
+        assert.equals(espadaDelDestino, rolando.artefactoFatal(astra))
     }
 }
 
